@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: .Dockerfile
+    image: scope-app
+    container_name: scope-app
+    volumes:
+      - .:/var/www
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    networks:
+      - mysql-network-scope
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-api_scope}
+      MYSQL_USER: ${MYSQL_USER:-admin}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-admin}
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    ports:
+      - "13307:3306"
+    restart: unless-stopped
+    networks:
+      - mysql-network-scope
+
+networks:
+  mysql-network-scope:
+    driver: bridge
