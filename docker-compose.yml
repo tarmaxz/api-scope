@@ -13,6 +13,7 @@ services:
       - "8000:8000"
     depends_on:
       - mysql
+      - redis
     networks:
       - mysql-network-scope
     command: php artisan serve --host=0.0.0.0 --port=8000
@@ -29,6 +30,14 @@ services:
     ports:
       - "13307:3306"
     restart: unless-stopped
+    networks:
+      - mysql-network-scope
+
+  redis:
+    image: redis:7.0
+    container_name: scope-redis
+    ports:
+      - "6379:6379"
     networks:
       - mysql-network-scope
 

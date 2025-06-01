@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\NurseRepository;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use App\Exceptions\BusinessException;
+use Illuminate\Support\Facades\Cache;
 
 class NurseController extends Controller {
 
@@ -20,7 +19,9 @@ class NurseController extends Controller {
     public function index()
     {
         try {
-            $response = $this->nurseRepository->all(request()->all());
+            $response = Cache::remember('nurse_all', now()->addMinutes(10), function() {
+                return $this->nurseRepository->all(request()->all());
+            });
             
             return response()->json($response);
         } catch (\Exception $e) {
