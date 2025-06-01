@@ -55,6 +55,14 @@ DB_DATABASE=api_scope
 DB_USERNAME=admin
 DB_PASSWORD=admin
 
+# Conexão com o Redis
+CACHE_DRIVER=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+REDIS_HOST=redis
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
 # 7. Rode as migrations e seeders (se houver)
 docker exec -it scope-app php artisan migrate --seed
 
